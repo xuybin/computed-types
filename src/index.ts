@@ -1,5 +1,4 @@
-import unknown from './unknown';
-import object from './object';
+import json from './json';
 import array from './array';
 import string from './string';
 import float from './float';
@@ -34,7 +33,7 @@ export {
 export default Schema;
 
 // runtime types
-export { unknown, object, array, string, int, float, boolean };
+export { json, array, string, int, float, boolean };
 
 // runtime helpers
 export { isPromiseLike };

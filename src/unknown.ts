@@ -1,7 +1,7 @@
 import Validator, { ValidatorProxy } from './Validator';
 import FunctionType, { FunctionParameters } from './schema/FunctionType';
 import { ErrorLike, toError } from './schema/errors';
-import { ObjectValidator } from './object';
+import { JsonValidator } from './json';
 import { StringValidator } from './string';
 import { FloatValidator } from './float';
 import { IntValidator } from './int';
@@ -41,10 +41,8 @@ export class UnknownValidator<
     );
   }
 
-  public object(
-    error?: ErrorLike<[unknown]>,
-  ): ValidatorProxy<ObjectValidator<P>> {
-    return this.transform(type('object', error), ObjectValidator);
+  public json(error?: ErrorLike<[unknown]>): ValidatorProxy<JsonValidator<P>> {
+    return this.transform(type('json', error), JsonValidator);
   }
 
   public array(

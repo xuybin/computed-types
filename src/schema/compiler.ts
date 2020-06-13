@@ -65,7 +65,7 @@ export default function compiler<S>(
       return [validator(...args), ([] as unknown) as Record<string, unknown>];
     };
   } else {
-    const validator = type('object', error);
+    const validator = type('json', error);
 
     typeValidator = (
       ...args: SchemaParameters<S>

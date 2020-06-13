@@ -42,11 +42,11 @@ export type Typeof = {
   string: string;
   float: number;
   int: number;
-  object: object; // eslint-disable-line @typescript-eslint/ban-types
+  json: object; // eslint-disable-line @typescript-eslint/ban-types
   boolean: boolean;
-  symbol: symbol;
-  bigint: bigint;
-  undefined: undefined;
+  //symbol: symbol;
+  //bigint: bigint;
+  //undefined: undefined;
 };
 
 // https://stackoverflow.com/a/50159864/518153

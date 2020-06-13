@@ -1,4 +1,6 @@
 import { ErrorLike, toError } from './errors';
+import { INT_MAX_VALUE, INT_MIN_VALUE } from '../int';
+import { FLOAT_MAX_VALUE, FLOAT_MIN_VALUE } from '../float';
 import FunctionType, { FunctionParameters } from './FunctionType';
 import {
   Enum,
@@ -14,14 +16,29 @@ export function type<
 >(type: T, error?: ErrorLike<P>): FunctionType<Typeof[T], P> {
   return (...args: P): Typeof[T] => {
     if (
-      typeof args[0] !== (type == 'int' || type == 'float' ? 'number' : type) ||
+      typeof args[0] !==
+        (type == 'int' || type == 'float'
+          ? 'number'
+          : type == 'json'
+          ? 'object'
+          : type) ||
       args[0] === null
     ) {
       throw toError(error || `Expect value to be "${type}"`, ...args);
     }
-    if (type == 'int' && !Number.isInteger(args[0])) {
+    if (
+      type == 'int' &&
+      (!Number.isInteger(args[0]) ||
+        (args[0] as number) > INT_MAX_VALUE ||
+        (args[0] as number) < INT_MIN_VALUE)
+    ) {
       throw toError(error || `Expect value to be a "int"`, ...args);
-    } else if (type == 'float' && !Number.isFinite(args[0])) {
+    } else if (
+      type == 'float' &&
+      (!Number.isFinite(args[0]) ||
+        (args[0] as number) > FLOAT_MAX_VALUE ||
+        (args[0] as number) < FLOAT_MIN_VALUE)
+    ) {
       throw toError(error || `Expect value to be a "float"`, ...args);
     }
     return args[0] as Typeof[T];

@@ -4,9 +4,8 @@ import { ErrorLike } from './schema/errors';
 import FunctionType, { FunctionParameters } from './schema/FunctionType';
 import { type } from './schema/validations';
 
-export const FLOAT_EPSILON = Number.EPSILON;
-export const FLOAT_MAX_VALUE = Number.MAX_VALUE;
-export const FLOAT_MIN_VALUE = Number.MIN_VALUE;
+export const FLOAT_MIN_VALUE = new Number('-3.402823466E+38').valueOf();
+export const FLOAT_MAX_VALUE = new Number('3.402823466E+38').valueOf();
 
 export class FloatValidator<
   P extends FunctionParameters = [number]

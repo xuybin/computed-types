@@ -4,8 +4,8 @@ import { ErrorLike } from './schema/errors';
 import FunctionType, { FunctionParameters } from './schema/FunctionType';
 import { type } from './schema/validations';
 
-export const INT_MAX_VALUE = Number.MAX_SAFE_INTEGER;
-export const INT_MIN_VALUE = Number.MIN_SAFE_INTEGER;
+export const INT_MIN_VALUE = -2147483648;
+export const INT_MAX_VALUE = 2147483647;
 
 export class IntValidator<
   P extends FunctionParameters = [number]
