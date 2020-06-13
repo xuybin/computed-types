@@ -1,14 +1,7 @@
 import 'mocha';
 import { assert } from 'chai';
 import { typeCheck } from './schema/utils';
-import Schema, {
-  Type,
-  string,
-  number,
-  array,
-  unknown,
-  ValidationError,
-} from './';
+import Schema, { Type, string, int, array, unknown, ValidationError } from './';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -21,7 +14,7 @@ describe('README', () => {
       items: array
         .of({
           id: string,
-          amount: number.gte(1).integer(),
+          amount: int.gte(1),
         })
         .min(1),
     });
@@ -62,7 +55,7 @@ describe('README', () => {
   });
 
   it('Validator chain', () => {
-    const validator = unknown.number().gt(0).toFixed(2);
+    const validator = unknown.float().gt(0).toFixed(2);
 
     assert.equal(validator('123.4567'), '123.46');
   });

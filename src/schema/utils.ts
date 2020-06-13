@@ -40,7 +40,8 @@ export type Primitive =
 
 export type Typeof = {
   string: string;
-  number: number;
+  float: number;
+  int: number;
   object: object; // eslint-disable-line @typescript-eslint/ban-types
   boolean: boolean;
   symbol: symbol;

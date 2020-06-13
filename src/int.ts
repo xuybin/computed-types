@@ -4,35 +4,11 @@ import { ErrorLike } from './schema/errors';
 import FunctionType, { FunctionParameters } from './schema/FunctionType';
 import { type } from './schema/validations';
 
-export class NumberValidator<
+export class IntValidator<
   P extends FunctionParameters = [number]
 > extends Validator<FunctionType<number, P>> {
-  public float(error?: ErrorLike<[number]>): ValidatorProxy<this> {
-    return this.test(
-      (val) => !isNaN(val) && Number.isFinite(val),
-      error || `Expect value to be a number`,
-    );
-  }
-
-  public integer(error?: ErrorLike<[number]>): ValidatorProxy<this> {
-    return this.test(
-      (val) => Number.isInteger(val),
-      error || `Expect value to be an integer`,
-    );
-  }
-
-  public toExponential(
-    ...args: Parameters<number['toExponential']>
-  ): ValidatorProxy<StringValidator<P>> {
-    return this.transform((val) => val.toExponential(...args), StringValidator);
-  }
-
-  public toFixed(
-    ...args: Parameters<number['toFixed']>
-  ): ValidatorProxy<StringValidator<P>> {
-    return this.transform((val) => val.toFixed(...args), StringValidator);
-  }
-
+  public MAX_VALUE = Number.MAX_SAFE_INTEGER;
+  public MIN_VALUE = Number.MIN_SAFE_INTEGER;
   public toLocaleString(
     ...args: Parameters<number['toLocaleString']>
   ): ValidatorProxy<StringValidator<P>> {
@@ -42,12 +18,6 @@ export class NumberValidator<
     );
   }
 
-  public toPrecision(
-    ...args: Parameters<number['toPrecision']>
-  ): ValidatorProxy<StringValidator<P>> {
-    return this.transform((val) => val.toPrecision(...args), StringValidator);
-  }
-
   public toString(
     ...args: Parameters<number['toString']>
   ): ValidatorProxy<StringValidator<P>> {
@@ -55,6 +25,9 @@ export class NumberValidator<
   }
 
   public min(min: number, error?: ErrorLike<[number]>): ValidatorProxy<this> {
+    if (!Number.isInteger(min)) {
+      throw new Error(`Expect value to be a int "min(${min})"`);
+    }
     return this.test(
       (val) => val >= min,
       error ||
@@ -66,6 +39,9 @@ export class NumberValidator<
   }
 
   public max(max: number, error?: ErrorLike<[number]>): ValidatorProxy<this> {
+    if (!Number.isInteger(max)) {
+      throw new Error(`Expect value to be a int "max(${max})"`);
+    }
     return this.test(
       (val) => val <= max,
       error ||
@@ -83,6 +59,9 @@ export class NumberValidator<
     boundary: number,
     error?: ErrorLike<[number]>,
   ): ValidatorProxy<this> {
+    if (!Number.isInteger(boundary)) {
+      throw new Error(`Expect value to be a int "gt(${boundary})"`);
+    }
     return this.test(
       (val) => val > boundary,
       error ||
@@ -97,6 +76,9 @@ export class NumberValidator<
     boundary: number,
     error?: ErrorLike<[number]>,
   ): ValidatorProxy<this> {
+    if (!Number.isInteger(boundary)) {
+      throw new Error(`Expect value to be a int "lt(${boundary})"`);
+    }
     return this.test(
       (val) => val < boundary,
       error ||
@@ -112,6 +94,9 @@ export class NumberValidator<
     max: number,
     error?: ErrorLike<[number]>,
   ): ValidatorProxy<this> {
+    if (!Number.isInteger(min) || !Number.isInteger(max)) {
+      throw new Error(`Expect value to be a int "between(${min},${max})"`);
+    }
     return this.test(
       (val) => val >= min && val <= max,
       error ||
@@ -123,6 +108,6 @@ export class NumberValidator<
   }
 }
 
-const number = new NumberValidator(type('number')).proxy();
+const int = new IntValidator(type('int')).proxy();
 
-export default number;
+export default int;

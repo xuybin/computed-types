@@ -4,7 +4,7 @@ import { typeCheck } from './utils';
 import { merge, either, optional } from './logic';
 import chaiAsPromised from 'chai-as-promised';
 import string from '../string';
-import number from '../number';
+import float from '../float';
 
 use(chaiAsPromised);
 
@@ -130,7 +130,7 @@ describe('schema/logic', () => {
 
     it('use switch', () => {
       const validator = either(
-        { type: 'foo' as const, foo: number },
+        { type: 'foo' as const, foo: float },
         { type: 'bar' as const, bar: string },
       );
 
@@ -153,7 +153,7 @@ describe('schema/logic', () => {
       assert.throw(
         () => validator({ type: 'foo', foo: 'dd' } as any),
         TypeError,
-        'foo: Expect value to be "number"',
+        'foo: Expect value to be "float"',
       );
 
       assert.throw(

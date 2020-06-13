@@ -88,27 +88,27 @@ describe('unknown', () => {
     );
   });
 
-  it('.number()', () => {
-    assert.equal(unknown.number()(1), 1);
-    assert.equal(unknown.number()(1.1), 1.1);
-    assert.equal(unknown.number()('1.1'), 1.1);
-    assert.equal(unknown.number()('-10.1'), -10.1);
-    assert.isNaN(unknown.number()('NaN'));
-    assert.equal(unknown.number()([1]), 1);
-    assert.equal(unknown.number()([-1.44]), -1.44);
-    assert.equal(unknown.number()(true), 1);
-    assert.equal(unknown.number()(false), 0);
-    assert.equal(unknown.number()(null), 0);
-    assert.equal(unknown.number()([]), 0);
-    assert.equal(unknown.number()(''), 0);
+  it('.float()', () => {
+    assert.equal(unknown.float()(1), 1);
+    assert.equal(unknown.float()(1.1), 1.1);
+    assert.equal(unknown.float()('1.1'), 1.1);
+    assert.equal(unknown.float()('-10.1'), -10.1);
+    // assert.isNaN(unknown.number()('NaN'));
+    assert.equal(unknown.float()([1]), 1);
+    assert.equal(unknown.float()([-1.44]), -1.44);
+    assert.equal(unknown.float()(true), 1);
+    assert.equal(unknown.float()(false), 0);
+    assert.equal(unknown.float()(null), 0);
+    assert.equal(unknown.float()([]), 0);
+    assert.equal(unknown.float()(''), 0);
 
-    assert.throws(() => unknown.number()({}), TypeError);
-    assert.throws(() => unknown.number()(undefined), TypeError);
-    assert.throws(() => unknown.number()([1, 2]), TypeError);
-    assert.throws(() => unknown.number()({ foo: 1 }), TypeError);
+    assert.throws(() => unknown.float()({}), TypeError);
+    assert.throws(() => unknown.float()(undefined), TypeError);
+    assert.throws(() => unknown.float()([1, 2]), TypeError);
+    assert.throws(() => unknown.float()({ foo: 1 }), TypeError);
 
     assert.throws(
-      () => unknown.number('undefined')(undefined),
+      () => unknown.float('undefined')(undefined),
       TypeError,
       'undefined',
     );

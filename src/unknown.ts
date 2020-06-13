@@ -3,7 +3,8 @@ import FunctionType, { FunctionParameters } from './schema/FunctionType';
 import { ErrorLike, toError } from './schema/errors';
 import { ObjectValidator } from './object';
 import { StringValidator } from './string';
-import { NumberValidator } from './number';
+import { FloatValidator } from './float';
+import { IntValidator } from './int';
 import { BooleanValidator } from './boolean';
 import { SchemaResolveType } from './schema/io';
 import compiler from './schema/compiler';
@@ -73,22 +74,44 @@ export class UnknownValidator<
     }, StringValidator);
   }
 
-  public number(
-    error?: ErrorLike<[unknown]>,
-  ): ValidatorProxy<NumberValidator<P>> {
+  public int(error?: ErrorLike<[unknown]>): ValidatorProxy<IntValidator<P>> {
     return this.transform((input) => {
       if (typeof input === 'number') {
+        if (!Number.isInteger(input)) {
+          throw toError(error || `Unknown int value`, input);
+        }
         return input;
       }
 
       const value = Number(input);
 
       if (isNaN(value) && (input as unknown) !== 'NaN') {
-        throw toError(error || `Unknown number value`, input);
+        throw toError(error || `Unknown int value`, input);
       }
 
       return value;
-    }, NumberValidator);
+    }, IntValidator);
+  }
+
+  public float(
+    error?: ErrorLike<[unknown]>,
+  ): ValidatorProxy<FloatValidator<P>> {
+    return this.transform((input) => {
+      if (typeof input === 'number') {
+        if (!Number.isFinite(input)) {
+          throw toError(error || `Unknown float value`, input);
+        }
+        return input;
+      }
+
+      const value = Number(input);
+
+      if (isNaN(value) && (input as unknown) !== 'NaN') {
+        throw toError(error || `Unknown float value`, input);
+      }
+
+      return value;
+    }, FloatValidator);
   }
 
   public boolean(

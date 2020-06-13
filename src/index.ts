@@ -2,7 +2,8 @@ import unknown from './unknown';
 import object from './object';
 import array from './array';
 import string from './string';
-import number from './number';
+import float from './float';
+import int from './int';
 import boolean from './boolean';
 import Schema from './Schema';
 import {
@@ -33,7 +34,7 @@ export {
 export default Schema;
 
 // runtime types
-export { unknown, object, array, string, number, boolean };
+export { unknown, object, array, string, int, float, boolean };
 
 // runtime helpers
 export { isPromiseLike };

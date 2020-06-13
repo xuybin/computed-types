@@ -13,10 +13,17 @@ export function type<
   P extends FunctionParameters = [Typeof[T]]
 >(type: T, error?: ErrorLike<P>): FunctionType<Typeof[T], P> {
   return (...args: P): Typeof[T] => {
-    if (typeof args[0] !== type || args[0] === null) {
+    if (
+      typeof args[0] !== (type == 'int' || type == 'float' ? 'number' : type) ||
+      args[0] === null
+    ) {
       throw toError(error || `Expect value to be "${type}"`, ...args);
     }
-
+    if (type == 'int' && !Number.isInteger(args[0])) {
+      throw toError(error || `Expect value to be a "int"`, ...args);
+    } else if (type == 'float' && !Number.isFinite(args[0])) {
+      throw toError(error || `Expect value to be a "float"`, ...args);
+    }
     return args[0] as Typeof[T];
   };
 }
