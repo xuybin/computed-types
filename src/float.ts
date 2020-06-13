@@ -4,12 +4,13 @@ import { ErrorLike } from './schema/errors';
 import FunctionType, { FunctionParameters } from './schema/FunctionType';
 import { type } from './schema/validations';
 
+export const FLOAT_EPSILON = Number.EPSILON;
+export const FLOAT_MAX_VALUE = Number.MAX_VALUE;
+export const FLOAT_MIN_VALUE = Number.MIN_VALUE;
+
 export class FloatValidator<
   P extends FunctionParameters = [number]
 > extends Validator<FunctionType<number, P>> {
-  public EPSILON = Number.EPSILON;
-  public MAX_VALUE = Number.MAX_VALUE;
-  public MIN_VALUE = Number.MIN_VALUE;
   public toExponential(
     ...args: Parameters<number['toExponential']>
   ): ValidatorProxy<StringValidator<P>> {

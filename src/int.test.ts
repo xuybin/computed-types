@@ -1,6 +1,6 @@
 import 'mocha';
 import { assert } from 'chai';
-import int from './int';
+import int, { INT_MAX_VALUE, INT_MIN_VALUE } from './int';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -9,8 +9,8 @@ describe('int', () => {
     assert.equal(int(123), 123);
     assert.equal(int(0), 0);
     assert.equal(int(-3), -3);
-    assert.equal(int(int.MAX_VALUE), int.MAX_VALUE);
-    assert.equal(int(int.MIN_VALUE), int.MIN_VALUE);
+    assert.equal(int(INT_MAX_VALUE), INT_MAX_VALUE);
+    assert.equal(int(INT_MIN_VALUE), INT_MIN_VALUE);
 
     assert.throws(() => int(undefined as any), TypeError);
     assert.throws(() => int(null as any), TypeError);

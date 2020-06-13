@@ -1,6 +1,10 @@
 import 'mocha';
 import { assert } from 'chai';
-import float from './float';
+import float, {
+  FLOAT_EPSILON,
+  FLOAT_MAX_VALUE,
+  FLOAT_MIN_VALUE,
+} from './float';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -10,9 +14,9 @@ describe('float', () => {
     assert.equal(float(12.3), 12.3);
     assert.equal(float(-12.3), -12.3);
     assert.equal(float(0), 0);
-    assert.equal(float(float.EPSILON), float.EPSILON);
-    assert.equal(float(float.MAX_VALUE), float.MAX_VALUE);
-    assert.equal(float(float.MIN_VALUE), float.MIN_VALUE);
+    assert.equal(float(FLOAT_EPSILON), FLOAT_EPSILON);
+    assert.equal(float(FLOAT_MAX_VALUE), FLOAT_MAX_VALUE);
+    assert.equal(float(FLOAT_MIN_VALUE), FLOAT_MIN_VALUE);
 
     assert.throws(() => float(NaN), TypeError);
     assert.throws(() => float(Number.POSITIVE_INFINITY), TypeError);
