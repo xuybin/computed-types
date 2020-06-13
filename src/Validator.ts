@@ -128,10 +128,46 @@ export default class Validator<F extends FunctionType> {
 
     return new Class(error(validator, err)).proxy();
   }
-}
 
-// circular dependencies: import those after creating the validator class
-// import { ObjectValidator } from './object';
-// import { StringValidator } from './string';
-// import { NumberValidator } from './number';
-// import { BooleanValidator } from './boolean';
+  public prisma: Set<string> = new Set();
+
+  public null(): this {
+    this.prisma.add('?');
+    return this;
+  }
+
+  public id(num?: number): this {
+    this.prisma.add(`@id${num ? num : ''}`);
+    return this;
+  }
+
+  public unique(num?: number): this {
+    this.prisma.add(`@unique${num ? num : ''}`);
+    return this;
+  }
+
+  public index(num?: number): this {
+    this.prisma.add(`@index${num ? num : ''}`);
+    return this;
+  }
+
+  public default(
+    expression: string | number | boolean | 'now()' | 'cuid()' | 'uuid()',
+  ): this {
+    this.prisma.add(`@default(${expression})`);
+    return this;
+  }
+
+  public relation(references: string[], name?: string): this {
+    //if (typeof this == 'object') {
+    this.prisma.add(
+      `@relation(references: [${references.join(', ')}]${
+        name ? ', name: ' + name : ''
+      })`,
+    );
+    return this;
+    // } else {
+    //   throw new Error(`relation`);
+    // }
+  }
+}

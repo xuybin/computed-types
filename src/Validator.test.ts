@@ -4,6 +4,7 @@ import { typeCheck } from './schema/utils';
 import Validator from './Validator';
 
 import chaiAsPromised from 'chai-as-promised';
+
 use(chaiAsPromised);
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -21,6 +22,12 @@ describe('Validator', () => {
 
       return number;
     }).proxy();
+
+    it('Prisma', () => {
+      const positiveNumberPrisma = positiveNumber.id().proxy();
+      typeCheck<ReturnType<typeof positiveNumberPrisma>, number>('ok');
+      typeCheck<Parameters<typeof positiveNumberPrisma>, [number]>('ok');
+    });
 
     it('Types', () => {
       typeCheck<ReturnType<typeof positiveNumber>, number>('ok');
@@ -216,6 +223,27 @@ describe('Validator', () => {
 
       assert.throws(() => validator(0), TypeError, 'error: 0');
       assert.throws(() => validator('foo' as any), TypeError, 'error: foo');
+    });
+  });
+
+  describe('object', () => {
+    const validator = new Validator(
+      (input: { a: number; b: number }) => input,
+    ).proxy();
+
+    it('Types', () => {
+      typeCheck<ReturnType<typeof validator>, { a: number; b: number }>('ok');
+      typeCheck<Parameters<typeof validator>, [{ a: number; b: number }]>('ok');
+    });
+
+    it('Prisma', () => {
+      const validatorPrisma = validator.relation(['id']).proxy();
+      typeCheck<ReturnType<typeof validatorPrisma>, { a: number; b: number }>(
+        'ok',
+      );
+      typeCheck<Parameters<typeof validatorPrisma>, [{ a: number; b: number }]>(
+        'ok',
+      );
     });
   });
 

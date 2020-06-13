@@ -1,6 +1,4 @@
 import { ErrorLike, toError } from './errors';
-import { INT_MAX_VALUE, INT_MIN_VALUE } from '../int';
-import { FLOAT_MAX_VALUE, FLOAT_MIN_VALUE } from '../float';
 import FunctionType, { FunctionParameters } from './FunctionType';
 import {
   Enum,
@@ -10,36 +8,58 @@ import {
   Typeof,
 } from './utils';
 
+export const INT_MIN_VALUE = -2147483648;
+export const INT_MAX_VALUE = 2147483647;
+
+export const FLOAT_MIN_VALUE = new Number('-3.402823466E+38').valueOf();
+export const FLOAT_MAX_VALUE = new Number('3.402823466E+38').valueOf();
+
 export function type<
   T extends keyof Typeof,
   P extends FunctionParameters = [Typeof[T]]
 >(type: T, error?: ErrorLike<P>): FunctionType<Typeof[T], P> {
   return (...args: P): Typeof[T] => {
-    if (
-      typeof args[0] !==
-        (type == 'int' || type == 'float'
-          ? 'number'
-          : type == 'json'
-          ? 'object'
-          : type) ||
-      args[0] === null
-    ) {
-      throw toError(error || `Expect value to be "${type}"`, ...args);
-    }
-    if (
-      type == 'int' &&
-      (!Number.isInteger(args[0]) ||
-        (args[0] as number) > INT_MAX_VALUE ||
-        (args[0] as number) < INT_MIN_VALUE)
-    ) {
-      throw toError(error || `Expect value to be a "int"`, ...args);
-    } else if (
-      type == 'float' &&
-      (!Number.isFinite(args[0]) ||
-        (args[0] as number) > FLOAT_MAX_VALUE ||
-        (args[0] as number) < FLOAT_MIN_VALUE)
-    ) {
-      throw toError(error || `Expect value to be a "float"`, ...args);
+    switch (type) {
+      case 'int':
+        if (
+          typeof args[0] !== 'number' ||
+          !Number.isInteger(args[0]) ||
+          (args[0] as number) < INT_MIN_VALUE ||
+          (args[0] as number) > INT_MAX_VALUE
+        ) {
+          throw toError(error || `Expect value to be "${type}"`, ...args);
+        }
+        break;
+      case 'float':
+        if (
+          typeof args[0] !== 'number' ||
+          !Number.isFinite(args[0]) ||
+          (args[0] as number) < FLOAT_MIN_VALUE ||
+          (args[0] as number) > FLOAT_MAX_VALUE
+        ) {
+          throw toError(error || `Expect value to be "${type}"`, ...args);
+        }
+        break;
+      case 'json':
+        if (typeof args[0] !== 'object' || args[0] === null) {
+          throw toError(error || `Expect value to be "${type}"`, ...args);
+        }
+        break;
+      case 'dateTime':
+        if (
+          typeof args[0] !== 'string' ||
+          !/^(?:(?!0000)[0-9]{4}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-8])|(?:0[13-9]|1[0-2])-(?:29|30)|(?:0[13578]|1[02])-31)|(?:[0-9]{2}(?:0[48]|[2468][048]|[13579][26])|(?:0[48]|[2468][048]|[13579][26])00)-02-29) (20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d$/.test(
+            args[0] as string,
+          )
+        ) {
+          throw toError(error || `Expect value to be "${type}"`, ...args);
+        }
+        break;
+      default:
+        if (typeof args[0] !== type || args[0] === null) {
+          throw toError(error || `Expect value to be "${type}"`, ...args);
+        }
+        break;
     }
     return args[0] as Typeof[T];
   };

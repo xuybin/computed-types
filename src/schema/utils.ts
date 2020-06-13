@@ -38,15 +38,19 @@ export type Primitive =
   | void
   | bigint;
 
+export const INT_MIN_VALUE = -2147483648;
+export const INT_MAX_VALUE = 2147483647;
+
 export type Typeof = {
   string: string;
+  dateTime: string;
   float: number;
   int: number;
   json: object; // eslint-disable-line @typescript-eslint/ban-types
   boolean: boolean;
-  //symbol: symbol;
-  //bigint: bigint;
-  //undefined: undefined;
+  symbol: symbol;
+  bigint: bigint;
+  undefined: undefined;
 };
 
 // https://stackoverflow.com/a/50159864/518153
